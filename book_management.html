@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>书籍管理</title>
+</head>
+<body>
+    <h1>书籍管理页面</h1>
+    
+    <div style="text-align: right;">
+        <!-- 显示昵称和性别，点击昵称跳转到修改信息页面 -->
+        <a href="{{ url_for('edit_user') }}">{{ user['nickname'] }}（{{ user['gender'] }}）</a> |
+        <a href="{{ url_for('login') }}">退出</a>
+    </div>
+
+    <h2>我的书籍</h2>
+    <ul>
+        {% for book in books %}
+            <li>
+                <strong>{{ book['title'] }}</strong><br>
+                作者：{{ book['author'] }}<br>
+                出版社：{{ book['publisher'] }}<br>
+                描述：{{ book['description'] }}<br>
+                <img src="{{ book['cover_image'] }}" alt="封面" width="100"><br><br>
+            </li>
+        {% else %}
+            <li>您还没有添加书籍。</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
