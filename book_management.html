@@ -7,26 +7,70 @@
 </head>
 <body>
     <h1>书籍管理页面</h1>
-    
+
+    <!-- 闪现消息 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul style="color: red;">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- 用户信息显示在右上角 -->
     <div style="text-align: right;">
-        <!-- 显示昵称和性别，点击昵称跳转到修改信息页面 -->
         <a href="{{ url_for('edit_user') }}">{{ user['nickname'] }}（{{ user['gender'] }}）</a> |
-        <a href="{{ url_for('login') }}">退出</a>
+        <a href="{{ url_for('login') }}">退出登录</a>
     </div>
 
-    <h2>我的书籍</h2>
-    <ul>
-        {% for book in books %}
-            <li>
-                <strong>{{ book['title'] }}</strong><br>
-                作者：{{ book['author'] }}<br>
-                出版社：{{ book['publisher'] }}<br>
-                描述：{{ book['description'] }}<br>
-                <img src="{{ book['cover_image'] }}" alt="封面" width="100"><br><br>
-            </li>
-        {% else %}
-            <li>您还没有添加书籍。</li>
-        {% endfor %}
-    </ul>
+    <!-- 操作按钮 -->
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+        <a href="{{ url_for('add_book') }}">
+            <button type="button">添加</button>
+        </a>
+    </div>
+
+    <!-- 书籍列表 -->
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>书号</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>简介</th>
+                <th>封面图片</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book['book_number'] }}</td>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['author'] }}</td>
+                <td>{{ book['publisher'] }}</td>
+                <td>{{ book['description'] }}</td>
+                <td>
+                    <img src="{{ book['cover_image'] }}" alt="封面" width="100">
+                </td>
+                <td>
+                    <a href="{{ url_for('edit_book', book_id=book['id']) }}">
+                        <button type="button">修改</button>
+                    </a>
+                    <a href="{{ url_for('delete_book', book_id=book['id']) }}" onclick="return confirm('确定要删除这本书吗？');">
+                        <button type="button">删除</button>
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">暂无书籍。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
